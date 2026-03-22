@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kantier — Platforma e Kantierit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1117;--ink2:#1C2333;
+  --amber:#F59E0B;--amber2:#D97706;--amber-lt:#FEF3C7;
+  --slate:#3D4A5C;--muted:#6B7A8D;
+  --border:#E2E7EF;--surface:#F7F8FA;
+  --white:#FFFFFF;--teal:#0D9488;
+  --green:#16A34A;--red:#DC2626;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--white);color:var(--ink);overflow-x:hidden;}
+h1,h2,h3,h4,.logo-text,.btn,.step-num,.role-title,.feat-title{font-family:'Barlow Condensed',sans-serif;}
+
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.logo-wrap{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer;}
+.logo-icon{width:38px;height:38px;background:var(--ink);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-text{font-size:21px;font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+.logo-text span{color:var(--amber);}
+.logo-sub{font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:block;margin-top:-3px;}
+nav ul{display:flex;gap:6px;list-style:none;}
+nav ul li button{text-decoration:none;font-size:14px;font-weight:700;color:var(--slate);letter-spacing:.04em;text-transform:uppercase;transition:color .2s;background:none;border:none;cursor:pointer;padding:7px 14px;border-radius:7px;}
+nav ul li button:hover{color:var(--ink);background:var(--surface);}
+nav ul li button.active{color:var(--amber2);background:var(--amber-lt);}
+.nav-cta{display:flex;gap:10px;align-items:center;}
+.btn-ghost{padding:8px 18px;border:1.5px solid var(--border);border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;transition:all .2s;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;background:transparent;}
+.btn-ghost:hover{border-color:var(--ink);}
+.btn-dark{padding:8px 20px;background:var(--ink);border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--white);text-decoration:none;transition:all .2s;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border:none;}
+.btn-dark:hover{background:var(--ink2);transform:translateY(-1px);}
+
+/* SHARED */
+.section-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber2);display:block;margin-bottom:10px;}
+h2{font-size:clamp(34px,4vw,54px);font-weight:900;letter-spacing:-.025em;line-height:1.05;text-transform:uppercase;color:var(--ink);margin-bottom:14px;}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;font-weight:400;max-width:560px;}
+.btn-amber{padding:14px 30px;background:var(--amber);color:var(--ink);border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:all .25s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+.btn-amber:hover{background:var(--amber2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.3);}
+.btn-outline{padding:14px 26px;background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-decoration:none;letter-spacing:.05em;text-transform:uppercase;transition:all .25s;cursor:pointer;}
+.btn-outline:hover{background:var(--ink);color:var(--white);}
+
+/* HERO */
+.hero{padding:120px 52px 80px;position:relative;overflow:hidden;min-height:90vh;display:flex;align-items:center;}
+.hero-pattern{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:54px 54px;opacity:.45;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);}
+.hero-inner{max-width:1280px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:var(--amber-lt);border:1px solid rgba(245,158,11,.3);border-radius:100px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:#92400E;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px;}
+.hero-badge i{width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;font-style:normal;}
+h1{font-size:clamp(50px,6vw,78px);font-weight:900;line-height:1.0;letter-spacing:-.03em;text-transform:uppercase;color:var(--ink);margin-bottom:20px;}
+h1 em{font-style:normal;color:var(--amber);}
+.hero-sub{font-size:17px;line-height:1.65;color:var(--muted);margin-bottom:34px;font-weight:400;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.hero-note{font-size:12px;color:var(--muted);}
+.hero-note span{color:var(--green);font-weight:600;}
+
+/* App window mockup */
+.app-window{background:var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 28px 72px rgba(0,0,0,.16);transform:perspective(900px) rotateY(-5deg) rotateX(2deg);transition:transform .4s;}
+.app-window:hover{transform:perspective(900px) rotateY(-1deg) rotateX(0deg);}
+.app-titlebar{background:#161D27;padding:10px 14px;display:flex;align-items:center;gap:8px;}
+.app-dots{display:flex;gap:5px;}
+.app-dots span{width:9px;height:9px;border-radius:50%;}
+.app-dots span:nth-child(1){background:#FF5F57;}
+.app-dots span:nth-child(2){background:#FEBC2E;}
+.app-dots span:nth-child(3){background:#28C840;}
+.app-url{flex:1;background:rgba(255,255,255,.06);border-radius:5px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,.25);font-family:monospace;}
+.app-body{display:grid;grid-template-columns:180px 1fr;}
+.app-sidebar{background:#111827;padding:16px 0;border-right:1px solid rgba(255,255,255,.06);}
+.app-brand{padding:0 14px 14px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px;}
+.app-brand-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:white;}
+.app-brand-name span{color:var(--amber);}
+.app-section-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:800;letter-spacing:.1em;color:rgba(255,255,255,.2);text-transform:uppercase;padding:12px 14px 5px;}
+.app-item{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.4);cursor:pointer;font-family:'Barlow',sans-serif;}
+.app-item.active{color:var(--amber);background:rgba(245,158,11,.08);}
+.app-item svg{width:13px;height:13px;flex-shrink:0;}
+.app-main{background:#0D1117;padding:16px;}
+.app-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.app-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:white;}
+.app-date{font-size:10px;color:rgba(255,255,255,.25);margin-top:2px;}
+.app-new-btn{padding:5px 12px;background:var(--teal);color:white;border-radius:5px;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;border:none;cursor:pointer;}
+.app-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.app-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px;}
+.app-card-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1;}
+.app-card-val.amber{color:var(--amber);}
+.app-card-label{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+.app-projects{display:flex;flex-direction:column;gap:6px;}
+.app-proj{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:8px 10px;display:flex;align-items:center;gap:8px;}
+.app-proj-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.app-proj-dot.g{background:#22C55E;}
+.app-proj-dot.a{background:var(--amber);}
+.app-proj-dot.b{background:#3B82F6;}
+.app-proj-name{font-size:11px;color:rgba(255,255,255,.7);flex:1;}
+.app-proj-bar{width:48px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.app-proj-fill{height:100%;border-radius:2px;background:var(--teal);}
+.app-proj-pct{font-size:10px;color:rgba(255,255,255,.3);}
+.float-badge{position:absolute;bottom:-14px;left:-18px;background:var(--white);border-radius:10px;padding:10px 16px;box-shadow:0 6px 28px rgba(0,0,0,.1);border:1px solid var(--border);display:flex;align-items:center;gap:10px;z-index:2;}
+.float-icon{width:32px;height:32px;background:var(--amber-lt);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.float-icon svg{width:16px;height:16px;stroke:var(--amber2);}
+.float-strong{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:var(--ink);display:block;}
+.float-small{font-size:11px;color:var(--muted);}
+.hero-visual-wrap{position:relative;}
+
+/* WHY SECTION */
+.why-section{background:var(--ink);padding:100px 52px;}
+.why-inner{max-width:1280px;margin:0 auto;}
+.why-section .section-tag{color:var(--amber);}
+.why-section h2{color:var(--white);}
+.why-section .section-sub{color:rgba(255,255,255,.45);}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px;align-items:start;}
+.why-problems{display:flex;flex-direction:column;gap:14px;}
+.why-problem{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px;}
+.why-problem-icon{width:36px;height:36px;border-radius:8px;background:rgba(220,38,38,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.why-problem-icon svg{width:18px;height:18px;stroke:#F87171;}
+.why-problem-icon.amber{background:rgba(245,158,11,.12);}
+.why-problem-icon.amber svg{stroke:var(--amber);}
+.why-problem-icon.blue{background:rgba(59,130,246,.12);}
+.why-problem-icon.blue svg{stroke:#93C5FD;}
+.why-problem h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:white;text-transform:uppercase;margin-bottom:5px;}
+.why-problem p{font-size:13px;color:rgba(255,255,255,.4);line-height:1.6;}
+.why-stats-col{display:flex;flex-direction:column;gap:14px;}
+.why-stat-card{border-radius:12px;padding:24px 26px;border:1px solid rgba(255,255,255,.08);}
+.why-stat-card.dark{background:rgba(255,255,255,.04);}
+.why-stat-card.amber-bg{background:var(--amber);border-color:var(--amber);}
+.why-stat-num{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em;}
+.why-stat-card.amber-bg .why-stat-num{color:var(--ink);}
+.why-stat-label{font-size:13px;color:rgba(255,255,255,.45);margin-top:6px;line-height:1.5;}
+.why-stat-card.amber-bg .why-stat-label{color:rgba(13,17,23,.65);}
+.why-stat-source{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:8px;}
+.why-stat-card.amber-bg .why-stat-source{color:rgba(13,17,23,.35);}
+.why-quote{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:18px 20px;margin-top:4px;}
+.why-quote p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.65;font-style:italic;}
+.why-quote cite{font-size:12px;color:var(--amber);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:8px;display:block;font-style:normal;}
+
+/* FEATURES */
+.features-section{padding:100px 52px;}
+.features-inner{max-width:1280px;margin:0 auto;}
+.features-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;flex-wrap:wrap;gap:24px;}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border-radius:14px;overflow:hidden;margin-bottom:2px;}
+.feat-grid-2{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border-radius:0 0 14px 14px;overflow:hidden;}
+.feat-card{background:var(--white);padding:30px 26px;transition:background .2s;}
+.feat-card:hover{background:var(--surface);}
+.feat-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.feat-icon svg{width:19px;height:19px;}
+.feat-icon.amb{background:var(--amber-lt);}
+.feat-icon.amb svg{stroke:var(--amber2);}
+.feat-icon.ink{background:#EEF0F5;}
+.feat-icon.ink svg{stroke:var(--ink);}
+.feat-icon.tel{background:#CCFBF1;}
+.feat-icon.tel svg{stroke:var(--teal);}
+.feat-title{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:7px;letter-spacing:-.01em;text-transform:uppercase;}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* PLATFORM */
+.platform-section{background:var(--ink);padding:100px 52px;}
+.platform-inner{max-width:1280px;margin:0 auto;}
+.platform-section .section-tag{color:var(--amber);}
+.platform-section h2{color:var(--white);}
+.platform-section .section-sub{color:rgba(255,255,255,.4);}
+.tabs{display:flex;gap:4px;margin-top:36px;margin-bottom:28px;background:rgba(255,255,255,.05);padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap;}
+.tab{padding:8px 18px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.35);cursor:pointer;transition:all .2s;border:none;background:transparent;}
+.tab.active{background:var(--amber);color:var(--ink);}
+.screen-panel{display:none;}
+.screen-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}
+.screen-info h3{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--white);text-transform:uppercase;margin-bottom:12px;}
+.screen-info p{font-size:14px;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:20px;}
+.screen-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.screen-list li{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.55);}
+.screen-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+.screen-mockup{background:#111827;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+.mockup-bar{background:#0D1117;padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.06);}
+.mockup-dots{display:flex;gap:4px;}
+.mockup-dots span{width:8px;height:8px;border-radius:50%;}
+.mockup-dots span:nth-child(1){background:#FF5F57;}
+.mockup-dots span:nth-child(2){background:#FEBC2E;}
+.mockup-dots span:nth-child(3){background:#28C840;}
+.mockup-label{font-size:10px;color:rgba(255,255,255,.2);font-family:monospace;flex:1;text-align:center;}
+.mockup-scene{padding:16px;}
+
+/* ROLES */
+.roles-section{padding:100px 52px;background:var(--surface);}
+.roles-inner{max-width:1280px;margin:0 auto;}
+.roles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:52px;}
+.role-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 24px;transition:all .25s;position:relative;overflow:hidden;}
+.role-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border);transition:background .25s;}
+.role-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,.08);}
+.role-card:hover::before{background:var(--amber);}
+.role-emoji{font-size:28px;margin-bottom:14px;display:block;}
+.role-title{font-size:19px;font-weight:800;color:var(--ink);margin-bottom:12px;text-transform:uppercase;}
+.role-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.role-list li{font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--surface);display:flex;align-items:center;gap:7px;}
+.role-list li:last-child{border:none;}
+.role-list li::before{content:'→';color:var(--amber);font-family:'Barlow Condensed',sans-serif;font-weight:700;flex-shrink:0;}
+
+/* HOW */
+.how-section{padding:100px 52px;}
+.how-inner{max-width:1280px;margin:0 auto;}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:52px;position:relative;}
+.steps::before{content:'';position:absolute;top:21px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);}
+.step{text-align:center;padding:0 10px;}
+.step-num{width:42px;height:42px;border-radius:50%;background:var(--white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:var(--ink);margin:0 auto 18px;position:relative;z-index:1;}
+.step-num.active{background:var(--amber);border-color:var(--amber);color:var(--ink);}
+.step-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:7px;text-transform:uppercase;}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* FOUNDER */
+.founder-section{padding:100px 52px;background:var(--surface);}
+.founder-inner{max-width:1280px;margin:0 auto;}
+.founder-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-top:52px;}
+.founder-avatar{width:220px;height:220px;border-radius:20px;background:var(--ink);overflow:hidden;margin-bottom:24px;}
+.founder-name{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--ink);text-transform:uppercase;margin-bottom:4px;}
+.founder-role{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--amber2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px;}
+.founder-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.founder-tag{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:6px;background:var(--surface);color:var(--slate);border:1px solid var(--border);}
+.founder-bio{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:20px;}
+.founder-bio strong{color:var(--ink);font-weight:600;}
+.founder-quote-block{background:var(--amber-lt);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:18px 20px;margin-bottom:20px;}
+.founder-quote-block p{font-size:14px;color:#92400E;line-height:1.65;font-style:italic;}
+.founder-contact{display:flex;flex-direction:column;gap:10px;}
+.contact-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--slate);}
+.contact-icon{width:32px;height:32px;background:var(--ink);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-icon svg{width:15px;height:15px;stroke:white;}
+.exp-item{background:var(--white);border-radius:12px;padding:20px 22px;border:1px solid var(--border);border-left:3px solid var(--amber);margin-bottom:14px;}
+.exp-year{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--amber2);text-transform:uppercase;margin-bottom:4px;}
+.exp-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:var(--ink);text-transform:uppercase;margin-bottom:5px;}
+.exp-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.founder-mission{background:var(--ink);border-radius:16px;padding:32px;margin-top:4px;}
+.founder-mission h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--white);text-transform:uppercase;margin-bottom:10px;}
+.founder-mission p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.7;}
+.founder-mission span{color:var(--amber);}
+
+/* CTA */
+.cta-section{margin:80px 52px;border-radius:20px;background:var(--ink);padding:80px 64px;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;position:relative;overflow:hidden;}
+.cta-glow{position:absolute;top:-80px;right:160px;width:380px;height:380px;background:radial-gradient(circle,rgba(245,158,11,.1) 0%,transparent 70%);}
+.cta-watermark{position:absolute;right:-20px;bottom:-50px;font-family:'Barlow Condensed',sans-serif;font-size:150px;font-weight:900;color:rgba(255,255,255,.025);letter-spacing:-.02em;pointer-events:none;white-space:nowrap;}
+.cta-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:block;}
+.cta-section h2{color:var(--white);margin-bottom:8px;}
+.cta-section p{color:rgba(255,255,255,.35);font-size:15px;}
+.cta-buttons{display:flex;flex-direction:column;gap:10px;align-items:flex-end;position:relative;z-index:1;}
+.cta-note{font-size:11px;color:rgba(255,255,255,.2);text-align:right;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 52px 28px;}
+.footer-top{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.footer-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-top:12px;max-width:260px;}
+.footer-col h4{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.footer-col ul a,.footer-col ul button{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;background:none;border:none;cursor:pointer;padding:0;text-align:left;}
+.footer-col ul a:hover,.footer-col ul button:hover{color:var(--ink);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.footer-copy{font-size:12px;color:var(--muted);}
+.footer-badges{display:flex;gap:8px;}
+.footer-badge{font-size:11px;font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:5px;background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+
+@media(max-width:1024px){
+  nav{padding:0 20px;}nav ul{display:none;}
+  .hero,.why-section,.features-section,.platform-section,.roles-section,.how-section,.founder-section{padding:70px 20px;}
+  .hero-inner,.why-grid,.screen-panel.active,.founder-grid{grid-template-columns:1fr;}
+  .feat-grid,.feat-grid-2,.roles-grid{grid-template-columns:1fr 1fr;}
+  .steps{grid-template-columns:1fr 1fr;gap:24px;}.steps::before{display:none;}
+  .cta-section{margin:40px 20px;grid-template-columns:1fr;padding:48px 28px;}
+  .cta-buttons{align-items:flex-start;}
+  footer{padding:40px 20px 20px;}.footer-top{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo-wrap" onclick="showPage('home')">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L3 7V22H9V15H15V22H21V7L12 2Z" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-text">KANTIER<span>.</span></span>
+      <span class="logo-sub">Platforma e Kantierit</span>
+    </div>
+  </div>
+  <ul>
+    <li><button class="nav-btn" data-page="features" onclick="showPage('features')">Funksionet</button></li>
+    <li><button class="nav-btn" data-page="platform" onclick="showPage('platform')">Platforma</button></li>
+    <li><button class="nav-btn" data-page="roles" onclick="showPage('roles')">Për kë</button></li>
+    <li><button class="nav-btn" data-page="how" onclick="showPage('how')">Si funksionon</button></li>
+    <li><button class="nav-btn" data-page="founder" onclick="showPage('founder')">Themeluesit</button></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="https://kantier.vercel.app/login" class="btn-ghost">Hyrje</a>
+    <a href="https://kantier.vercel.app/login" class="btn-dark">Fillo falas →</a>
+  </div>
+</nav>
+
+<!-- ════ HOME ════ -->
+<div id="page-home" class="page active" style="padding-top:66px;">
+  <section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><i></i>E para në Shqipëri</div>
+        <h1>Menaxho<br><em>Kantierin</em><br>Tënd</h1>
+        <p class="hero-sub">Planet, detyrat, kontraktorët, raportet — gjithçka e dixhitalizuar në një platformë të vetme, 100% në gjuhën shqipe.</p>
+        <div class="hero-btns">
+          <a href="https://kantier.vercel.app/login" class="btn-amber">Fillo falas — 0 lekë →</a>
+          <button class="btn-outline" onclick="showPage('platform')">Shiko platformën</button>
+        </div>
+        <p class="hero-note"><span>✓</span> Pa kartë krediti &nbsp;·&nbsp; <span>✓</span> 100% shqip &nbsp;·&nbsp; <span>✓</span> Gati në 5 min</p>
+      </div>
+      <div class="hero-visual-wrap">
+        <div class="app-window">
+          <div class="app-titlebar">
+            <div class="app-dots"><span></span><span></span><span></span></div>
+            <div class="app-url">kantier.vercel.app/dashboard</div>
+          </div>
+          <div class="app-body">
+            <div class="app-sidebar">
+              <div class="app-brand"><div class="app-brand-name">KANTIER<span>.</span></div></div>
+              <div class="app-section-label">Kryesore</div>
+              <div class="app-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</div>
+              <div class="app-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Projektet</div>
+              <div class="app-section-label">Punë</div>
+              <div class="app-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Detyrat</div>
+              <div class="app-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Planet</div>
+              <div class="app-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Raportet</div>
+            </div>
+            <div class="app-main">
+              <div class="app-header">
+                <div><div class="app-title">Dashboard</div><div class="app-date">E shtunë, 22 Mars 2026</div></div>
+                <button class="app-new-btn">+ Projekt</button>
+              </div>
+              <div class="app-cards">
+                <div class="app-card"><div class="app-card-val amber">34</div><div class="app-card-label">Detyra sot</div></div>
+                <div class="app-card"><div class="app-card-val">12</div><div class="app-card-label">Projekte aktive</div></div>
+                <div class="app-card"><div class="app-card-val">8</div><div class="app-card-label">Ekipi</div></div>
+                <div class="app-card"><div class="app-card-val">97%</div><div class="app-card-label">Gjenerohen</div></div>
+              </div>
+              <div class="app-projects">
+                <div class="app-proj"><div class="app-proj-dot g"></div><div class="app-proj-name">Rezidenca "Kodra e Diellit"</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:72%"></div></div><div class="app-proj-pct">72%</div></div>
+                <div class="app-proj"><div class="app-proj-dot a"></div><div class="app-proj-name">Hotel "Riviera", Sarandë</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:45%;background:#F59E0B"></div></div><div class="app-proj-pct">45%</div></div>
+                <div class="app-proj"><div class="app-proj-dot b"></div><div class="app-proj-name">Magazina Industriale, Durrës</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:28%;background:#3B82F6"></div></div><div class="app-proj-pct">28%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="float-badge">
+          <div class="float-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+          <div><span class="float-strong">+1,240 detyra</span><span class="float-small">të përfunduara sot</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why-section">
+    <div class="why-inner">
+      <span class="section-tag">Pse nevojitet</span>
+      <h2>Shqipëria ndërton.<br>Por pa sistem.</h2>
+      <p class="section-sub">Sektori i ndërtimit është në rritje historike — por menaxhimi mbetet i kaotik, manual, dhe i shpërndarë në WhatsApp.</p>
+      <div class="why-grid">
+        <div class="why-problems">
+          <div class="why-problem">
+            <div class="why-problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div>
+              <h4>Materialet humbasin në WhatsApp</h4>
+              <p>Porositë, kërkesat për material dhe ndryshimet e projektit humbasin mes bisedave. Nuk ka gjurmim, nuk ka historik, nuk ka përgjegjësi.</p>
+            </div>
+          </div>
+          <div class="why-problem">
+            <div class="why-problem-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div>
+              <h4>Detyrat nuk gjurmohen dot</h4>
+              <p>Kush bëri çfarë dhe kur? Menaxherët humbin kohë duke pyetur çdo ditë — punë që mund të automatizohej plotësisht.</p>
+            </div>
+          </div>
+          <div class="why-problem">
+            <div class="why-problem-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div>
+              <h4>Planet në email, fotot në telefon, raportet në Excel</h4>
+              <p>Informacioni i projektit është i shpërndarë në 5-10 vende. Kur duhet një raport, merr orë të tëra për ta mbledhur gjithçka.</p>
+            </div>
+          </div>
+          <div class="why-quote">
+            <p>"Çdo ditë klientët pyesin ku janë punët, kontraktorët pyesin ku janë materialet, ekipi pyet ku janë planet. Gjithçka kërkon komunikim manual dhe asgjë nuk është e sistemuar."</p>
+            <cite>— Eksperiencë direkte nga kantieri shqiptar</cite>
+          </div>
+        </div>
+        <div class="why-stats-col">
+          <div class="why-stat-card amber-bg">
+            <div class="why-stat-num">1.9M m²</div>
+            <div class="why-stat-label">Sipërfaqe ndërtimi e aprovuar vetëm në Tiranë gjatë 2024 — rekordi historik</div>
+            <div class="why-stat-source">Burimi: INSTAT 2024</div>
+          </div>
+          <div class="why-stat-card dark">
+            <div class="why-stat-num" style="color:white;">€1 miliard</div>
+            <div class="why-stat-label">Vlera totale e lejeve të ndërtimit të aprovuara në 2024 nga bashkitë e Shqipërisë</div>
+            <div class="why-stat-source">Burimi: INSTAT / Shqiptarja.com</div>
+          </div>
+          <div class="why-stat-card dark">
+            <div class="why-stat-num" style="color:white;">0</div>
+            <div class="why-stat-label">Software menaxhimi kantieri në gjuhën shqipe para Kantier — mundësia e tregut është plotësisht e hapur</div>
+            <div class="why-stat-source">Vlerësim tregu 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA HOME -->
+  <div class="cta-section">
+    <div class="cta-glow"></div>
+    <div class="cta-watermark">KANTIER</div>
+    <div>
+      <span class="cta-tag">Fillo sot</span>
+      <h2>Kantieri juaj meriton<br>teknologji moderne</h2>
+      <p>I pari software shqiptar i ndërtimit — dixhitalizoni sot.</p>
+    </div>
+    <div class="cta-buttons">
+      <a href="https://kantier.vercel.app/login" class="btn-amber">Fillo falas tani →</a>
+      <span class="cta-note">Pa kontratë · Anulo kurdo · 100% shqip</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="logo-wrap" style="cursor:default;margin-bottom:12px;">
+          <div class="logo-icon" style="width:32px;height:32px;border-radius:7px;"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7V22H9V15H15V22H21V7L12 2Z" fill="white"/></svg></div>
+          <span class="logo-text" style="font-size:18px;">KANTIER<span>.</span></span>
+        </div>
+        <p class="footer-desc">Platforma e parë shqipe për menaxhimin dixhital të projekteve të ndërtimit. Ndërtuar në Tiranë, për ndërtuesit shqiptarë.</p>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+          <a href="tel:+355694305703" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.54 2.18 2 2 0 012.54 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l.9-.9a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            +355 69 430 5703
+          </a>
+          <a href="mailto:ucju019@ucl.ac.uk" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            ucju019@ucl.ac.uk
+          </a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Produkti</h4><ul>
+        <li><button onclick="showPage('features')">Funksionet</button></li>
+        <li><button onclick="showPage('platform')">Platforma</button></li>
+        <li><button onclick="showPage('how')">Si funksionon</button></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kompania</h4><ul>
+        <li><button onclick="showPage('founder')">Themeluesit</button></li>
+        <li><a href="mailto:ucju019@ucl.ac.uk">Kontakt</a></li>
+        <li><a href="#">Privatësia</a></li>
+        <li><a href="#">Kushtet</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Zgjidhjet</h4><ul>
+        <li><button onclick="showPage('roles')">Kontraktorët</button></li>
+        <li><button onclick="showPage('roles')">Inxhinierët</button></li>
+        <li><button onclick="showPage('roles')">Menaxherët</button></li>
+        <li><button onclick="showPage('roles')">Punëtorët</button></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Kantier. Të gjitha të drejtat e rezervuara. Tiranë, Shqipëri.</span>
+      <div class="footer-badges">
+        <span class="footer-badge">🇦🇱 Made in Albania</span>
+        <span class="footer-badge">Open Source</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════ FEATURES ════ -->
+<div id="page-features" class="page" style="padding-top:66px;">
+  <section class="features-section">
+    <div class="features-inner">
+      <div class="features-header">
+        <div><span class="section-tag">Funksionet</span><h2>Gjithçka që duhet<br>në kantier</h2></div>
+        <p class="section-sub" style="max-width:360px;">Nga planet deri te garancitë — i gjithë cikli i projektit të ndërtimit i dixhitalizuar.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-icon amb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="feat-title">Menaxhim Planesh</div><div class="feat-desc">Ngarko PDF dhe DWG. Shëno mbi plan, cakto detyra në vendndodhje specifike, version control automatik.</div></div>
+        <div class="feat-card"><div class="feat-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="feat-title">Menaxhim Detyrash</div><div class="feat-desc">Board Kanban me kolona prioriteti. Checklist, foto, vendndodhje, person përgjegjës dhe afati — gjithçka bashkë.</div></div>
+        <div class="feat-card"><div class="feat-icon tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="feat-title">Menaxhim Kontraktorësh</div><div class="feat-desc">Shto nënkontraktorë falas. Cakto punë specifike dhe ndjek progresin e secilit.</div></div>
+        <div class="feat-card"><div class="feat-icon amb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="feat-title">Raporte Automatike</div><div class="feat-desc">Gjenero raporte PDF profesionale me një klikim. Ditari, inspektimet, progresi për klientin.</div></div>
+      </div>
+      <div class="feat-grid-2">
+        <div class="feat-card"><div class="feat-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="feat-title">Foto Kantieri</div><div class="feat-desc">Fotografo direkt nga aplikacioni. Çdo foto lidhet me projektin dhe vendndodhjen automatikisht.</div></div>
+        <div class="feat-card"><div class="feat-icon tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="feat-title">Orar & Schedule</div><div class="feat-desc">Pamje Gantt e projektit. Planifiko fazat dhe afatet me qartësi totale.</div></div>
+        <div class="feat-card"><div class="feat-icon amb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="feat-title">Garanci & Pretendime</div><div class="feat-desc">Regjistro defektet dhe kërkesat e garancisë. Gjurmo çdo rast deri në mbyllje.</div></div>
+        <div class="feat-card"><div class="feat-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="feat-title">Dashboard & Statistika</div><div class="feat-desc">Paneli qendror me projektet aktive, detyrat e hapura dhe statusin e ekipit — live.</div></div>
+      </div>
+      <div style="margin-top:40px;text-align:center;">
+        <a href="https://kantier.vercel.app/login" class="btn-amber">Provo tani falas →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════ PLATFORM ════ -->
+<div id="page-platform" class="page" style="padding-top:66px;">
+  <section class="platform-section" style="min-height:calc(100vh - 66px);">
+    <div class="platform-inner">
+      <span class="section-tag">Platforma</span>
+      <h2>Shiko si funksionon</h2>
+      <p class="section-sub">Ndërfaqe e pastër, e shpejtë, projektuar për kantier — jo për zyrë.</p>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab(0,this)">Planet</button>
+        <button class="tab" onclick="showTab(1,this)">Detyrat</button>
+        <button class="tab" onclick="showTab(2,this)">Raportet</button>
+        <button class="tab" onclick="showTab(3,this)">Dashboard</button>
+      </div>
+      <div id="tab-0" class="screen-panel active">
+        <div class="screen-info">
+          <h3>Menaxhim Planesh</h3>
+          <p>Ngarko plane PDF shumëfaqeshe dhe DWG. Shëno mbi plan, cakto detyra në vendndodhje specifike dhe ndiq ndryshimet me Version Control automatik.</p>
+          <ul class="screen-list">
+            <li>Ngarkim PDF/DWG me drag & drop</li>
+            <li>Shënime dhe forma mbi plan</li>
+            <li>Caktim detyrash në vendndodhje specifike</li>
+            <li>Kontrolli i versioneve dhe historiku</li>
+            <li>Kategori: Arkitekturë, Civile, Elektrike, HVAC</li>
+          </ul>
+        </div>
+        <div class="screen-mockup">
+          <div class="mockup-bar"><div class="mockup-dots"><span></span><span></span><span></span></div><div class="mockup-label">Planet — Arkitektura</div></div>
+          <div class="mockup-scene">
+            <svg viewBox="0 0 360 240" width="100%">
+              <rect width="360" height="240" fill="#0D1117"/>
+              <rect x="0" y="0" width="360" height="28" fill="#161D27"/>
+              <text x="12" y="18" fill="rgba(255,255,255,.5)" font-size="8" font-family="sans-serif" font-weight="bold">Planet — Projekt: Rezidenca Kodra</text>
+              <rect x="32" y="34" width="260" height="180" rx="3" fill="#1a2744" stroke="#2a3a5a" stroke-width="0.5"/>
+              <rect x="32" y="34" width="260" height="180" fill="url(#bg)" opacity=".3"/>
+              <rect x="60" y="50" width="200" height="140" fill="none" stroke="#64A0FF" stroke-width="1.5"/>
+              <line x1="60" y1="120" x2="160" y2="120" stroke="#64A0FF" stroke-width="1.5"/>
+              <line x1="160" y1="50" x2="160" y2="190" stroke="#64A0FF" stroke-width="1.5"/>
+              <circle cx="110" cy="85" r="8" fill="#F59E0B"/><text x="110" y="89" text-anchor="middle" fill="#0D1117" font-size="8" font-weight="bold">!</text>
+              <circle cx="200" cy="155" r="8" fill="#EF4444"/><text x="200" y="159" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text>
+              <circle cx="240" cy="80" r="8" fill="#22C55E"/><text x="240" y="84" text-anchor="middle" fill="white" font-size="8">✓</text>
+              <rect x="298" y="34" width="56" height="180" fill="#111827"/>
+              <text x="304" y="48" fill="rgba(255,255,255,.3)" font-size="7">PLANET</text>
+              <rect x="302" y="52" width="48" height="18" rx="3" fill="#1E3A5F"/>
+              <text x="307" y="65" fill="rgba(100,160,255,.9)" font-size="7">A2.01-1</text>
+              <rect x="302" y="74" width="48" height="18" rx="3" fill="#111827"/>
+              <text x="307" y="87" fill="rgba(255,255,255,.4)" font-size="7">A2.02-1</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div id="tab-1" class="screen-panel">
+        <div class="screen-info">
+          <h3>Menaxhim Detyrash</h3>
+          <p>Board Kanban me kolona prioriteti. Çdo detyrë ka checklist, foto dhe person përgjegjës.</p>
+          <ul class="screen-list">
+            <li>Kolonat: Prioritet 1, 2, 3, Përfunduar</li>
+            <li>Checklist me nëndetyra</li>
+            <li>Kategori: Elektrike, Hidraulike, Beton, Suvatim...</li>
+            <li>Foto direkt në detyrë</li>
+            <li>Ndryshim statusi me një klikim</li>
+          </ul>
+        </div>
+        <div class="screen-mockup">
+          <div class="mockup-bar"><div class="mockup-dots"><span></span><span></span><span></span></div><div class="mockup-label">Detyrat — Board</div></div>
+          <div class="mockup-scene">
+            <svg viewBox="0 0 360 240" width="100%">
+              <rect width="360" height="240" fill="#0D1117"/>
+              <rect width="360" height="28" fill="#161D27"/>
+              <text x="12" y="18" fill="rgba(255,255,255,.5)" font-size="8" font-family="sans-serif">Detyrat — Projekt Test</text>
+              <text x="14" y="42" fill="rgba(255,255,255,.3)" font-size="7">PRIORITET 1 (2)</text>
+              <rect x="10" y="48" width="76" height="44" rx="4" fill="#1E293B" stroke="rgba(255,255,255,.06)" stroke-width="0.5"/>
+              <rect x="10" y="48" width="76" height="3" rx="2" fill="#DC2626"/>
+              <text x="14" y="62" fill="rgba(255,255,255,.7)" font-size="7">Instalo konduit EF-4</text>
+              <text x="14" y="74" fill="rgba(255,255,255,.3)" font-size="6">Elektrike · Sot</text>
+              <text x="96" y="42" fill="rgba(255,255,255,.3)" font-size="7">PRIORITET 2 (3)</text>
+              <rect x="92" y="48" width="76" height="44" rx="4" fill="#1E293B" stroke="rgba(255,255,255,.06)" stroke-width="0.5"/>
+              <rect x="92" y="48" width="76" height="3" rx="2" fill="#F59E0B"/>
+              <text x="96" y="62" fill="rgba(255,255,255,.7)" font-size="7">Suvatim Dhoma 201</text>
+              <text x="96" y="74" fill="rgba(255,255,255,.3)" font-size="6">Suvatim · 25 Mar</text>
+              <text x="178" y="42" fill="rgba(255,255,255,.3)" font-size="7">PERFUNDUAR (4)</text>
+              <rect x="174" y="48" width="76" height="44" rx="4" fill="#0F2A1A" stroke="rgba(34,197,94,.1)" stroke-width="0.5"/>
+              <rect x="174" y="48" width="76" height="3" rx="2" fill="#16A34A"/>
+              <text x="178" y="62" fill="rgba(255,255,255,.4)" font-size="7">Beton shtylla C2</text>
+              <text x="178" y="74" fill="rgba(34,197,94,.5)" font-size="6">✓ Verifikuar</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div id="tab-2" class="screen-panel">
+        <div class="screen-info">
+          <h3>Raporte PDF Automatike</h3>
+          <p>Gjenero raporte profesionale me një klikim. Me logo dhe ngjyrat e kompanisë suaj.</p>
+          <ul class="screen-list">
+            <li>Raport ditari i kantierit</li>
+            <li>Raport inspektimi me foto</li>
+            <li>Raport progresi për klientin</li>
+            <li>Eksportim i menjëhershëm PDF</li>
+            <li>Dërgim automatik me email</li>
+          </ul>
+        </div>
+        <div class="screen-mockup">
+          <div class="mockup-bar"><div class="mockup-dots"><span></span><span></span><span></span></div><div class="mockup-label">Raporte PDF</div></div>
+          <div class="mockup-scene">
+            <svg viewBox="0 0 360 240" width="100%">
+              <rect width="360" height="240" fill="#0D1117"/>
+              <rect x="20" y="10" width="175" height="220" rx="4" fill="white" opacity=".95"/>
+              <rect x="20" y="10" width="175" height="28" rx="4" fill="#0D1117"/>
+              <rect x="20" y="34" width="175" height="4" fill="#F59E0B"/>
+              <text x="27" y="27" fill="white" font-size="8" font-weight="bold">KANTIER.</text>
+              <text x="27" y="52" fill="#0D1117" font-size="7" font-weight="bold">RAPORT DITARI KANTIERI</text>
+              <text x="27" y="62" fill="#6B7A8D" font-size="6">Projekti: Rezidenca Kodra · 22 Mars 2026</text>
+              <line x1="27" y1="70" x2="185" y2="70" stroke="#E2E7EF" stroke-width="0.5"/>
+              <text x="27" y="82" fill="#0D1117" font-size="7" font-weight="bold">Aktiviteti i ditës</text>
+              <rect x="27" y="87" width="155" height="16" rx="2" fill="#F7F8FA"/>
+              <text x="31" y="99" fill="#0D1117" font-size="6">Kompletim suvatimi Dhoma 201-205</text>
+              <rect x="27" y="107" width="155" height="16" rx="2" fill="#F7F8FA"/>
+              <text x="31" y="119" fill="#0D1117" font-size="6">Instalim dritareve Kati 3 — 4/6 copë</text>
+              <text x="27" y="140" fill="#9AA5B4" font-size="5">Gjeneruar nga Kantier · app.kantier.vercel.app</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div id="tab-3" class="screen-panel">
+        <div class="screen-info">
+          <h3>Dashboard Qendror</h3>
+          <p>Një pamje e vetme me gjithçka. Projektet, detyrat, ekipi — gjithçka live.</p>
+          <ul class="screen-list">
+            <li>Statistikat e të gjitha projekteve</li>
+            <li>Detyrat e vonuara dhe urgjente</li>
+            <li>Grafik progresi për çdo projekt</li>
+            <li>Aktiviteti i fundit i ekipit</li>
+          </ul>
+        </div>
+        <div class="screen-mockup">
+          <div class="mockup-bar"><div class="mockup-dots"><span></span><span></span><span></span></div><div class="mockup-label">Dashboard</div></div>
+          <div class="mockup-scene">
+            <svg viewBox="0 0 360 240" width="100%">
+              <rect width="360" height="240" fill="#0D1117"/>
+              <rect width="360" height="28" fill="#161D27"/>
+              <text x="12" y="18" fill="white" font-size="9" font-weight="bold">Dashboard</text>
+              <rect x="10" y="34" width="78" height="38" rx="5" fill="#1E293B"/>
+              <text x="18" y="53" fill="#F59E0B" font-size="18" font-weight="bold">12</text>
+              <text x="18" y="65" fill="rgba(255,255,255,.3)" font-size="6">Projekte aktive</text>
+              <rect x="96" y="34" width="78" height="38" rx="5" fill="#1E293B"/>
+              <text x="104" y="53" fill="white" font-size="18" font-weight="bold">34</text>
+              <text x="104" y="65" fill="rgba(255,255,255,.3)" font-size="6">Detyra sot</text>
+              <rect x="10" y="84" width="220" height="22" rx="4" fill="#1E293B"/>
+              <circle cx="20" cy="95" r="4" fill="#22C55E"/>
+              <text x="30" y="98" fill="rgba(255,255,255,.7)" font-size="7">Rezidenca "Kodra e Diellit"</text>
+              <rect x="155" y="91" width="60" height="4" rx="2" fill="rgba(255,255,255,.1)"/>
+              <rect x="155" y="91" width="43" height="4" rx="2" fill="#0D9488"/>
+              <text x="218" y="98" fill="rgba(255,255,255,.3)" font-size="6">72%</text>
+              <rect x="10" y="110" width="220" height="22" rx="4" fill="#1E293B"/>
+              <circle cx="20" cy="121" r="4" fill="#F59E0B"/>
+              <text x="30" y="124" fill="rgba(255,255,255,.7)" font-size="7">Hotel "Riviera", Sarandë</text>
+              <rect x="155" y="117" width="60" height="4" rx="2" fill="rgba(255,255,255,.1)"/>
+              <rect x="155" y="117" width="27" height="4" rx="2" fill="#F59E0B"/>
+              <text x="218" y="124" fill="rgba(255,255,255,.3)" font-size="6">45%</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:32px;">
+        <a href="https://kantier.vercel.app/login" class="btn-amber">Hyr në platformë →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════ ROLES ════ -->
+<div id="page-roles" class="page" style="padding-top:66px;">
+  <section class="roles-section" style="min-height:calc(100vh - 66px);">
+    <div class="roles-inner">
+      <span class="section-tag">Për kë</span>
+      <h2>Ndërtuar për çdo rol</h2>
+      <p class="section-sub">Çdo anëtar i ekipit sheh pikërisht atë që i duhet. Akses i personalizuar.</p>
+      <div class="roles-grid">
+        <div class="role-card"><span class="role-emoji">👷</span><div class="role-title">Menaxheri i Projektit</div><ul class="role-list"><li>Dashboard me të gjitha projektet</li><li>Ndjekja e progresit dhe afateve</li><li>Raporte për klientin</li><li>Aprovimi i dokumenteve</li></ul></div>
+        <div class="role-card"><span class="role-emoji">📐</span><div class="role-title">Inxhinieri / Arkitekti</div><ul class="role-list"><li>Ngarkim dhe shënim planesh</li><li>Detyra teknike dhe inspektime</li><li>Raporte teknike PDF</li><li>Kontrolli i versioneve</li></ul></div>
+        <div class="role-card"><span class="role-emoji">🔨</span><div class="role-title">Punëtori i Kantierit</div><ul class="role-list"><li>Detyrat e ditës në telefon</li><li>Foto nga kantieri</li><li>Checklist i thjeshtë</li><li>Ndërfaqe 100% shqip</li></ul></div>
+        <div class="role-card"><span class="role-emoji">🏢</span><div class="role-title">Kontraktori</div><ul class="role-list"><li>Aksesi vetëm tek punët e tij</li><li>Progresi i punëve</li><li>Dokumentacion</li><li>Falas pa limit</li></ul></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════ HOW ════ -->
+<div id="page-how" class="page" style="padding-top:66px;">
+  <section class="how-section" style="min-height:calc(100vh - 66px);">
+    <div class="how-inner">
+      <span class="section-tag">Procesi</span>
+      <h2>Gati në 5 hapa</h2>
+      <p class="section-sub">Nga regjistrimi deri te kantieri i dixhitalizuar — brenda 10 minutave.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num active">1</div><div class="step-title">Regjistrohu falas</div><div class="step-desc">Krijo llogarinë me email. Pa kartë krediti.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-title">Krijo projektin</div><div class="step-desc">Shto emrin, adresën dhe datën.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-title">Ngarko planet</div><div class="step-desc">Drag & drop PDF. Organizohet automatikisht.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-title">Fto ekipin</div><div class="step-desc">Dërgo link. Secilit i caktohet roli.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-title">Fillo punën</div><div class="step-desc">Planet, detyrat, fotot — gjithçka live.</div></div>
+      </div>
+      <div style="text-align:center;margin-top:60px;">
+        <a href="https://kantier.vercel.app/login" class="btn-amber">Fillo tani →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════ FOUNDER ════ -->
+<div id="page-founder" class="page" style="padding-top:66px;">
+  <section class="founder-section" style="min-height:calc(100vh - 66px);">
+    <div class="founder-inner">
+      <span class="section-tag">Themeluesit</span>
+      <h2>Ndërtuar nga dikush<br>që e njeh kantjerin</h2>
+      <div class="founder-grid">
+        <div>
+          <div class="founder-avatar">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <rect width="220" height="220" fill="#1C2333"/>
+              <circle cx="110" cy="85" r="40" fill="#2D3748"/>
+              <path d="M40 220 Q40 160 110 150 Q180 160 180 220Z" fill="#2D3748"/>
+              <path d="M78 83 Q78 52 110 46 Q142 52 142 83 Z" fill="#F59E0B"/>
+              <rect x="72" y="83" width="76" height="9" rx="3" fill="#F59E0B"/>
+              <path d="M86 83 Q86 60 110 56 Q134 60 134 83 Z" fill="#E8870A"/>
+              <rect x="104" y="50" width="12" height="32" rx="2" fill="rgba(0,0,0,0.14)"/>
+              <rect x="0" y="210" width="220" height="10" fill="#F59E0B" opacity=".5"/>
+            </svg>
+          </div>
+          <div class="founder-name">Aurora Baba</div>
+          <div class="founder-role">Themelues & CEO · Kantier</div>
+          <div class="founder-tags">
+            <span class="founder-tag">Inxhiniere / Arkitekte</span>
+            <span class="founder-tag">Eksperiencë Tereni</span>
+            <span class="founder-tag">UCL London</span>
+            <span class="founder-tag">Tiranë, Shqipëri</span>
+          </div>
+          <div class="founder-quote-block">
+            <p>"Çdo ditë në kantier shihja të njëjtin problem: informacioni i rëndësishëm humonte në biseda WhatsApp, materialet nuk gjurmoheshin, dhe raportet bëheshin me orë. Vendosa të ndërtoj zgjidhjen që doja vetë të kisha."</p>
+          </div>
+          <div class="founder-contact">
+            <div class="contact-item">
+              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.54 2.18 2 2 0 012.54 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l.9-.9a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+              <a href="tel:+355694305703" style="color:var(--slate);text-decoration:none;">+355 69 430 5703</a>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <a href="mailto:ucju019@ucl.ac.uk" style="color:var(--slate);text-decoration:none;">ucju019@ucl.ac.uk</a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="exp-item">
+            <div class="exp-year">Eksperienca</div>
+            <div class="exp-title">Punë direkte në kantier</div>
+            <div class="exp-desc">Vite eksperiencë praktike në menaxhimin e projekteve të ndërtimit në Shqipëri. Njohje e thellë e problemeve reale të inxhinierëve, menaxherëve dhe kontraktorëve.</div>
+          </div>
+          <div class="exp-item">
+            <div class="exp-year">Problemi real</div>
+            <div class="exp-title">WhatsApp nuk mjafton</div>
+            <div class="exp-desc">Ndërkohë që sektori shqiptar i ndërtimit po rritet me mbi 1 miliard euro investime vjetore, menaxhimi mbetet i kaotik. Materialet humbasin, detyrat nuk gjurmohen, raportet bëhen manualisht.</div>
+          </div>
+          <div class="exp-item">
+            <div class="exp-year">Zgjidhja</div>
+            <div class="exp-title">E ndërtuar nga brenda</div>
+            <div class="exp-desc">Kantier nuk është ndërtuar nga programistë që nuk njohin kantjerin — është ndërtuar nga dikush që e ka jetuar problemin dhe e di saktësisht çfarë duhet.</div>
+          </div>
+          <div class="founder-mission">
+            <h3>Misioni ynë</h3>
+            <p>Të sjellim <span>teknologjinë moderne</span> në çdo kantier shqiptar — me çmime të përballueshme, në gjuhën shqipe, me mbështetje lokale. <span>Shqipëria meriton zgjidhjen e vet.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + id);
+  if(el) { el.classList.add('active'); window.scrollTo(0,0); }
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === id);
+  });
+}
+function showTab(idx, btn) {
+  for(let i = 0; i < 4; i++) {
+    const p = document.getElementById('tab-' + i);
+    if(p) p.classList.toggle('active', i === idx);
+  }
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+</script>
+</body>
+</html>
