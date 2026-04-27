@@ -23,7 +23,7 @@ h1,h2,h3,h4,.logo-text,.btn,.step-num,.role-title,.feat-title{font-family:'Barlo
 .page.active{display:block;}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(13,17,23,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(13,17,23,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);}
 .logo-wrap{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer;}
 .logo-icon{width:36px;height:36px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .logo-text{font-size:20px;font-weight:800;color:white;letter-spacing:-.01em;}
@@ -37,6 +37,18 @@ nav ul li button.active{color:var(--amber);}
 .btn-ghost:hover{border-color:white;color:white;}
 .btn-amber-nav{padding:8px 20px;background:var(--amber);border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:var(--ink);text-decoration:none;transition:all .2s;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border:none;}
 .btn-amber-nav:hover{background:var(--amber2);}
+/* Hamburger */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:white;border-radius:2px;transition:all .25s;}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+/* Mobile drawer */
+.nav-drawer{display:none;position:fixed;top:66px;left:0;right:0;bottom:0;background:rgba(13,17,23,0.98);z-index:499;flex-direction:column;padding:28px 24px;gap:6px;overflow-y:auto;}
+.nav-drawer.open{display:flex;}
+.nav-drawer button{font-size:20px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:.05em;text-transform:uppercase;background:none;border:none;cursor:pointer;padding:14px 0;text-align:left;font-family:'Barlow Condensed',sans-serif;border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-drawer button:hover,.nav-drawer button.active{color:var(--amber);}
+.nav-drawer .nav-drawer-cta{margin-top:20px;width:100%;padding:16px;background:var(--amber);color:var(--ink);border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;text-align:center;}
 
 /* SHARED */
 .section-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:10px;}
@@ -308,21 +320,26 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
 
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
-  nav{padding:0 20px;}
+  nav{padding:0 16px;}
   nav ul{display:none;}
+  .nav-cta{display:none;}
+  .nav-hamburger{display:flex;}
   .hero-inner,.problem-grid,.compare-grid,.founder-grid,.screen-panel.active,.roles-grid{grid-template-columns:1fr;}
   #page-home section [style*="grid-template-columns:repeat(4"]{grid-template-columns:repeat(2,1fr)!important;}
   #page-home section [style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr!important;}
   #page-home section [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
-  #page-home .hero-inner{flex-direction:column!important;text-align:center!important;}
+  #page-home .hero-inner{flex-direction:column!important;text-align:center!important;align-items:center!important;}
   .hero-inner{padding:60px 20px 40px;}
   .photo-strip{grid-template-columns:1fr;}
   .photo-strip-item:not(:first-child){display:none;}
   .feat-grid,.feat-grid-2{grid-template-columns:1fr 1fr;}
   .steps{grid-template-columns:1fr 1fr;}
-  section,.problem-content,.features-section,.platform-section,.roles-section,.how-section,.compare-section,.founder-section,.cta-section{padding-left:20px;padding-right:20px;}
-  footer{padding:40px 20px 24px;}
+  section,.problem-content,.features-section,.platform-section,.roles-section,.how-section,.compare-section,.founder-section,.cta-section{padding-left:16px!important;padding-right:16px!important;}
+  footer{padding:40px 16px 24px;}
   .footer-top{grid-template-columns:1fr 1fr;}
+  .wl-row{grid-template-columns:1fr;}
+  .wl-body{padding:20px 16px;}
+  .wl-header{padding:20px 16px;}
 }
 
 /* ═══ WAITLIST MODAL ═══ */
@@ -375,7 +392,21 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
   <div class="nav-cta">
     <button onclick="openWaitlist()" class="btn-amber-nav">Regjistro Interesin →</button>
   </div>
+  <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer">
+  <button onclick="navGo('home')">🏠 Kryesore</button>
+  <button onclick="navGo('features')">⚡ Funksionet</button>
+  <button onclick="navGo('platform')">📱 Platforma</button>
+  <button onclick="navGo('roles')">👥 Për kë</button>
+  <button onclick="navGo('how')">🔧 Si funksionon</button>
+  <button onclick="navGo('founder')">🌟 Themeluesit</button>
+  <button class="nav-drawer-cta" onclick="openWaitlist();closeMobileNav();">Regjistrohu falas →</button>
+</div>
 
 <!-- ════════════════ HOME ════════════════ -->
 <div id="page-home" class="page active" style="padding-top:66px;">
@@ -385,24 +416,24 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
     <div class="hero-bg"></div>
     <div class="hero-img"></div>
     <div class="hero-gradient"></div>
-    <div class="hero-inner" style="align-items:center;text-align:center;flex-direction:column;gap:0;">
-      <div style="max-width:680px;margin:0 auto;padding:0 20px;">
-        <div class="hero-badge"><span class="hero-badge-dot"></span>Albania's First Construction Management Platform</div>
-        <h1 style="font-size:clamp(48px,8vw,88px);margin-bottom:16px;">E Para<br>në <em>Shqipëri</em></h1>
-        <p class="hero-sub" style="font-size:clamp(15px,2vw,18px);max-width:520px;margin:0 auto 28px;">Planet, detyrat, dokumentet ISO 9001 — gjithçka dixhitale dhe në shqip.</p>
+    <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 66px);padding:48px 16px 40px;text-align:center;gap:40px;">
+      <div style="max-width:640px;width:100%;">
+        <div class="hero-badge" style="justify-content:center;"><span class="hero-badge-dot"></span>Albania's First Construction Management Platform</div>
+        <h1 style="font-size:clamp(52px,10vw,96px);margin-bottom:16px;line-height:1;">E Para<br>në <em>Shqipëri</em></h1>
+        <p style="font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto 28px;line-height:1.65;font-weight:400;">Planet, detyrat, dokumentet ISO 9001 — gjithçka dixhitale dhe në shqip. Platforma e parë shqiptare e menaxhimit të kantierit.</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-          <button onclick="openWaitlist()" class="btn-amber" style="padding:14px 28px;font-size:15px;">Regjistrohu falas →</button>
-          <button onclick="showPage('platform')" class="btn-outline-white" style="padding:14px 24px;font-size:15px;">Shiko platformën</button>
+          <button onclick="openWaitlist()" class="btn-amber" style="padding:15px 32px;font-size:16px;">Regjistrohu falas →</button>
+          <button onclick="showPage('platform')" class="btn-outline-white" style="padding:15px 24px;font-size:15px;">Shiko platformën</button>
         </div>
-        <div class="hero-trust" style="justify-content:center;margin-top:20px;">
+        <div class="hero-trust" style="justify-content:center;margin-top:18px;flex-wrap:wrap;">
           <span class="hero-trust-item">Pa kartë krediti</span>
           <span class="hero-trust-item">100% shqip</span>
           <span class="hero-trust-item">ISO 9001</span>
         </div>
       </div>
 
-      <!-- App mockup — smaller on mobile -->
-      <div class="hero-visual-wrap" style="margin-top:40px;width:100%;max-width:720px;padding:0 20px;">
+      <!-- App mockup -->
+      <div style="width:100%;max-width:700px;">
         <div class="app-window">
           <div class="app-titlebar">
             <div class="app-dots"><span></span><span></span><span></span></div>
@@ -432,7 +463,7 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
               </div>
               <div class="app-projects">
                 <div class="app-proj"><div class="app-proj-dot g"></div><div class="app-proj-name">Objekt Residencial, Tiranë</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:72%"></div></div><div class="app-proj-pct">72%</div></div>
-                <div class="app-proj"><div class="app-proj-dot a"></div><div class="app-proj-name">Objekt Mixed-Use, 5 Katësh, Vlorë</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:45%;background:#F59E0B"></div></div><div class="app-proj-pct">45%</div></div>
+                <div class="app-proj"><div class="app-proj-dot a"></div><div class="app-proj-name">Objekt Mixed-Use, Vlorë</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:45%;background:#F59E0B"></div></div><div class="app-proj-pct">45%</div></div>
                 <div class="app-proj"><div class="app-proj-dot b"></div><div class="app-proj-name">Kompleks Industrial, Durrës</div><div class="app-proj-bar"><div class="app-proj-fill" style="width:28%;background:#3B82F6"></div></div><div class="app-proj-pct">28%</div></div>
               </div>
             </div>
@@ -640,7 +671,7 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
       </ul></div>
       <div class="footer-col"><h4>Kompania</h4><ul>
         <li><button onclick="showPage('founder')">Themeluesit</button></li>
-        <li><a href="mailto:aurora@kantier.al">Kontakt</a></li>
+        <li><a href="mailto:ucju019@ucl.ac.uk">Kontakt</a></li>
       </ul></div>
       <div class="footer-col"><h4>Zgjidhjet</h4><ul>
         <li><button onclick="showPage('roles')">Kontraktorët</button></li>
@@ -982,7 +1013,7 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
                 </a>
                 <a href="/cdn-cgi/l/email-protection#d5a0b6bfa0e5e4ec95a0b6b9fbb4b6fba0be" class="founder-contact-item">
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  <span class="__cf_email__" data-cfemail="cbbea8a1befbfaf28bbea8a7e5aaa8e5bea0">[email&#160;protected]</span>
+                  <a href="mailto:ucju019@ucl.ac.uk" style="color:rgba(255,255,255,.35);text-decoration:none;">ucju019@ucl.ac.uk</a>
                 </a>
               </div>
             </div>
@@ -1088,6 +1119,7 @@ function showPage(id){
   document.querySelectorAll('nav ul li button').forEach(b=>b.classList.remove('active'));
   const nb=document.getElementById('nav-'+id);
   if(nb){nb.classList.add('active');}
+  closeMobileNav();
 }
 
 function showTab(i,btn){
@@ -1096,6 +1128,26 @@ function showTab(i,btn){
   const panel=document.getElementById('tab-'+i);
   if(panel){panel.classList.add('active');}
   if(btn){btn.classList.add('active');}
+}
+
+function toggleMobileNav(){
+  const drawer=document.getElementById('navDrawer');
+  const ham=document.getElementById('navHamburger');
+  drawer.classList.toggle('open');
+  ham.classList.toggle('open');
+  document.body.style.overflow=drawer.classList.contains('open')?'hidden':'';
+}
+
+function closeMobileNav(){
+  const drawer=document.getElementById('navDrawer');
+  const ham=document.getElementById('navHamburger');
+  drawer.classList.remove('open');
+  ham.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function navGo(id){
+  showPage(id);
 }
 
 function openWaitlist(){
