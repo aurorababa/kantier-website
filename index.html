@@ -1267,9 +1267,7 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
 
 <script>
 const SUPABASE_URL = 'https://fgelxehsxbqzdshdqtyj.supabase.co';
-// ⚠️ This must be the anon JWT key from Supabase → Project Settings → API → "anon public" (starts with eyJ...)
-// The sb_publishable_ key does NOT work for direct REST API calls from the browser
-const SUPABASE_ANON_KEY = 'sb_publishable_0hAtB5y24WWImmy70Yb40g_XRCQf6rCkVr_iY';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnZWx4ZWhzeGJxemRzaGRxdHlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTczNzEsImV4cCI6MjA4OTY3MzM3MX0.OdujrL49DvBZgXNKlQBR6jJMdPc1CoFL04s-lkTDTXg';
 
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
