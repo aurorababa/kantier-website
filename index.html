@@ -44,11 +44,11 @@ nav ul li button.active{color:var(--amber);}
 .nav-hamburger.open span:nth-child(2){opacity:0;}
 .nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
 /* Mobile drawer */
-.nav-drawer{display:none;position:fixed;top:66px;left:0;right:0;bottom:0;background:rgba(13,17,23,0.98);z-index:499;flex-direction:column;padding:28px 24px;gap:6px;overflow-y:auto;}
+.nav-drawer{display:none;position:fixed;top:66px;left:0;right:0;bottom:0;background:#ffffff;z-index:499;flex-direction:column;padding:0;overflow-y:auto;}
 .nav-drawer.open{display:flex;}
-.nav-drawer button{font-size:20px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:.05em;text-transform:uppercase;background:none;border:none;cursor:pointer;padding:14px 0;text-align:left;font-family:'Barlow Condensed',sans-serif;border-bottom:1px solid rgba(255,255,255,0.06);}
-.nav-drawer button:hover,.nav-drawer button.active{color:var(--amber);}
-.nav-drawer .nav-drawer-cta{margin-top:20px;width:100%;padding:16px;background:var(--amber);color:var(--ink);border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;text-align:center;}
+.nav-drawer button{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:.06em;text-transform:uppercase;background:none;border:none;cursor:pointer;padding:16px 24px;text-align:left;font-family:'Barlow Condensed',sans-serif;border-bottom:1px solid var(--border);}
+.nav-drawer button:hover,.nav-drawer button.active{color:var(--amber2);background:#FAFAFA;}
+.nav-drawer .nav-drawer-cta{margin:20px 24px;padding:16px;background:var(--amber);color:var(--ink);border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;text-align:center;}
 
 /* SHARED */
 .section-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:10px;}
@@ -399,12 +399,12 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer">
-  <button onclick="navGo('home')">🏠 Kryesore</button>
-  <button onclick="navGo('features')">⚡ Funksionet</button>
-  <button onclick="navGo('platform')">📱 Platforma</button>
-  <button onclick="navGo('roles')">👥 Për kë</button>
-  <button onclick="navGo('how')">🔧 Si funksionon</button>
-  <button onclick="navGo('founder')">🌟 Themeluesit</button>
+  <button onclick="navGo('home')">Kryesore</button>
+  <button onclick="navGo('features')">Funksionet</button>
+  <button onclick="navGo('platform')">Platforma</button>
+  <button onclick="navGo('roles')">Për kë</button>
+  <button onclick="navGo('how')">Si funksionon</button>
+  <button onclick="navGo('founder')">Themeluesit</button>
   <button class="nav-drawer-cta" onclick="openWaitlist();closeMobileNav();">Regjistrohu falas →</button>
 </div>
 
@@ -672,6 +672,7 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
       <div class="footer-col"><h4>Kompania</h4><ul>
         <li><button onclick="showPage('founder')">Themeluesit</button></li>
         <li><a href="mailto:ucju019@ucl.ac.uk">Kontakt</a></li>
+        <li><a href="mailto:ucju019@ucl.ac.uk" style="font-size:11px;color:var(--slate);opacity:.7;">ucju019@ucl.ac.uk</a></li>
       </ul></div>
       <div class="footer-col"><h4>Zgjidhjet</h4><ul>
         <li><button onclick="showPage('roles')">Kontraktorët</button></li>
