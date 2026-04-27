@@ -1267,6 +1267,8 @@ footer{background:#080C11;padding:60px 52px 32px;border-top:1px solid rgba(255,2
 
 <script>
 const SUPABASE_URL = 'https://fgelxehsxbqzdshdqtyj.supabase.co';
+// ⚠️ This must be the anon JWT key from Supabase → Project Settings → API → "anon public" (starts with eyJ...)
+// The sb_publishable_ key does NOT work for direct REST API calls from the browser
 const SUPABASE_ANON_KEY = 'sb_publishable_0hAtB5y24WWImmy70Yb40g_XRCQf6rCkVr_iY';
 
 function showPage(id){
@@ -1352,8 +1354,9 @@ async function submitWaitlist(){
       document.getElementById('wlSuccess').style.display='block';
       document.querySelector('#wlSuccess p').textContent='Emaili juaj është tashmë i regjistruar. Do t\'ju njoftojmë sapo platforma të jetë gati!';
     } else {
-      const data = await res.json();
-      errEl.textContent = 'Gabim — provoni sërish.';
+      let msg = 'Gabim — provoni sërish.';
+      try { const d = await res.json(); if(d.message) msg = d.message; else if(d.error) msg = d.error; } catch(x){}
+      errEl.textContent = msg + ' (HTTP ' + res.status + ')';
       errEl.style.display='block';
       btn.disabled=false;
       btn.textContent='Regjistrohem falas →';
@@ -1394,8 +1397,8 @@ async function submitInline(){
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': 'sb_publishable_0hAtB5y24WWImmy70Yb40g_XRCQf6rCkVr_iY',
-        'Authorization': 'Bearer sb_publishable_0hAtB5y24WWImmy70Yb40g_XRCQf6rCkVr_iY',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
         'Prefer': 'return=minimal'
       },
       body: JSON.stringify({
@@ -1415,13 +1418,15 @@ async function submitInline(){
       btn.previousElementSibling.style.display='none';
       successEl.style.display='block';
     } else {
-      errEl.textContent='Gabim — provoni sërish.';
+      let msg = 'Gabim — provoni sërish.';
+      try { const d = await res.json(); if(d.message) msg = d.message; else if(d.error) msg = d.error; } catch(x){}
+      errEl.textContent = msg + ' (HTTP ' + res.status + ')';
       errEl.style.display='block';
       btn.disabled=false;
       btn.textContent='Regjistro Interesin Tim →';
     }
   } catch(e){
-    errEl.textContent='Problem me lidhjen — provoni sërish.';
+    errEl.textContent='Problem me lidhjen: ' + e.message;
     errEl.style.display='block';
     btn.disabled=false;
     btn.textContent='Regjistro Interesin Tim →';
